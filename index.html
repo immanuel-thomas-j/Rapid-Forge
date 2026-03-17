@@ -15,29 +15,25 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-ocean.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/dialog/dialog.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/fold/foldgutter.min.css">
     
     <script src="https://unpkg.com/feather-icons"></script>
 
     <style>
         :root {
-            /* Default Dark Mode */
             --bg-root: #09090b;       
             --bg-panel: #18181b;      
             --bg-input: #27272a;      
             --bg-hover: #3f3f46;      
             --border: #3f3f46;        
             --border-light: #52525b;  
-            
             --accent: #6366f1;        
             --accent-hover: #4f46e5;  
             --accent-glow: rgba(99, 102, 241, 0.25);
-            
             --text-main: #f4f4f5;     
             --text-muted: #a1a1aa;    
-            
-            /* Dynamic UI Variables */
             --brand-text-start: #ffffff;
             --brand-text-end: #a1a1aa;
             --brand-svg-bg1: var(--bg-input);
@@ -45,12 +41,10 @@
             --cm-bg: #0f111a;
             --cm-border: rgba(255,255,255,0.05);
             --cm-active-line: rgba(255, 255, 255, 0.03);
-            
             --log-warn-text: #fbbf24;
             --log-warn-bg: rgba(251, 191, 36, 0.05);
             --log-error-text: #f87171;
             --log-error-bg: rgba(248, 113, 113, 0.05);
-
             --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
             --font-code: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
             --radius-sm: 6px;
@@ -59,7 +53,6 @@
             --current-match-color: rgba(99, 102, 241, 0.8);
         }
 
-        /* Light Mode Override */
         [data-theme="light"] {
             --bg-root: #f4f4f5;       
             --bg-panel: #ffffff;      
@@ -67,10 +60,8 @@
             --bg-hover: #d4d4d8;      
             --border: #d4d4d8;        
             --border-light: #a1a1aa;  
-            
             --text-main: #18181b;     
             --text-muted: #52525b;    
-            
             --brand-text-start: #18181b;
             --brand-text-end: #52525b;
             --brand-svg-bg1: #ffffff;
@@ -78,7 +69,6 @@
             --cm-bg: #ffffff;
             --cm-border: rgba(0,0,0,0.05);
             --cm-active-line: rgba(0, 0, 0, 0.03);
-
             --log-warn-text: #d97706;
             --log-warn-bg: rgba(245, 158, 11, 0.08);
             --log-error-text: #dc2626;
@@ -92,13 +82,11 @@
             font-family: var(--font-ui); display: grid; grid-template-rows: 56px 1fr 28px; overflow: hidden; 
         }
 
-        /* Scrollbars */
         ::-webkit-scrollbar { width: 10px; height: 10px; }
         ::-webkit-scrollbar-track { background: var(--bg-root); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; border: 2px solid var(--bg-root); }
         ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
 
-        /* Header */
         header { 
             background: var(--bg-panel); border-bottom: 1px solid var(--border); 
             display: flex; align-items: center; justify-content: space-between; 
@@ -117,7 +105,6 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* Controls */
         .controls { display: flex; gap: 8px; align-items: center; }
         select, .btn { 
             background: transparent; color: var(--text-muted); border: 1px solid transparent; 
@@ -140,17 +127,30 @@
         .icon-only.active { background: var(--bg-input); color: var(--accent); border-color: var(--border); }
         .divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
 
-        /* Workspace */
         .workspace { display: flex; height: 100%; overflow: hidden; position: relative; }
         .editor-col { width: 50%; display: flex; flex-direction: column; background: var(--cm-bg); position: relative; }
         
-        .CodeMirror { height: 100%; font-family: var(--font-code); font-size: 14px; line-height: 1.6; padding-top: 8px; background: transparent; }
+        .tab-bar {
+            display: flex; background: var(--bg-panel); border-bottom: 1px solid var(--border);
+            padding: 0 12px;
+        }
+        .tab-btn {
+            background: transparent; border: none; color: var(--text-muted); padding: 10px 16px;
+            font-size: 13px; font-weight: 600; font-family: var(--font-ui); cursor: pointer;
+            border-bottom: 2px solid transparent; transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--text-main); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .editor-wrapper { flex: 1; display: none; position: relative; }
+        .editor-wrapper.active { display: block; }
+        
+        .CodeMirror { height: 100%; font-family: var(--font-code); font-size: 14px; line-height: 1.6; padding-top: 8px; background: transparent; position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
         .CodeMirror-activeline-background { background: var(--cm-active-line) !important; }
         .CodeMirror-gutters { background: var(--cm-bg) !important; border-right: 1px solid var(--cm-border); }
         .cm-search-match { background-color: var(--highlight-color); }
         .cm-search-match-active { background-color: var(--current-match-color); border-radius: 2px; }
 
-        /* Search Widget */
         .search-widget { 
             position: absolute; top: 12px; right: 24px; background: var(--bg-panel); width: 340px; 
             border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px var(--border); 
@@ -172,12 +172,10 @@
         .nav-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: var(--radius-sm); display: grid; place-items: center; }
         .nav-btn:hover { background: var(--bg-input); color: var(--text-main); }
 
-        /* Gutter */
         .gutter { width: 4px; background: var(--bg-root); cursor: col-resize; position: relative; z-index: 10; }
         .gutter:hover, .gutter:active { background: var(--accent); }
         .gutter::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 2px; height: 24px; background: var(--border-light); border-radius: 2px; }
 
-        /* Preview */
         .preview-col { width: 50%; display: flex; flex-direction: column; background: var(--bg-root); position: relative; }
         .iframe-stage { 
             flex: 1; position: relative; width: 100%; height: 100%; display: grid; place-items: center; 
@@ -191,7 +189,6 @@
             border: 12px solid #18181b; flex-shrink: 0; box-shadow: 0 0 0 1px #3f3f46, 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Console */
         .console-wrap { 
             height: 220px; background: var(--bg-panel); border-top: 1px solid var(--border); 
             display: flex; flex-direction: column; font-family: var(--font-code); 
@@ -214,7 +211,6 @@
         .log-warn { color: var(--log-warn-text); background: var(--log-warn-bg); }
         .log-error { color: var(--log-error-text); background: var(--log-error-bg); }
 
-        /* Footer */
         footer { 
             background: var(--accent); display: flex; align-items: center; justify-content: space-between; 
             padding: 0 20px; font-size: 12px; color: white; font-weight: 500;
@@ -260,6 +256,12 @@
 
     <main class="workspace" id="workspace">
         <section class="editor-col" id="left-pane" aria-label="Code Editor">
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab('html', this)">HTML</button>
+                <button class="tab-btn" onclick="switchTab('css', this)">CSS</button>
+                <button class="tab-btn" onclick="switchTab('js', this)">JavaScript</button>
+            </div>
+
             <div id="search-widget" class="search-widget" role="search">
                 <div class="search-row">
                     <button class="nav-btn" onclick="toggleReplaceRow()" aria-label="Toggle Replace"><i data-feather="chevron-right" id="replace-toggle-icon"></i></button>
@@ -282,7 +284,10 @@
                     <button class="nav-btn" onclick="replaceAll()" aria-label="Replace all" title="Replace All"><i data-feather="layers"></i></button>
                 </div>
             </div>
-            <textarea id="code-editor" aria-hidden="true"></textarea>
+
+            <div class="editor-wrapper active" id="wrap-html"><textarea id="code-html" aria-hidden="true"></textarea></div>
+            <div class="editor-wrapper" id="wrap-css"><textarea id="code-css" aria-hidden="true"></textarea></div>
+            <div class="editor-wrapper" id="wrap-js"><textarea id="code-js" aria-hidden="true"></textarea></div>
         </section>
 
         <div class="gutter" id="gutter" role="separator" aria-orientation="vertical"></div>
@@ -328,22 +333,18 @@
     <script>
         feather.replace();
 
-        const defaultCode = `<!DOCTYPE html>
+        const defaultHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RapidForge Preview</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-zinc-950 text-zinc-50 min-h-screen flex items-center justify-center p-6">
-    
     <div class="max-w-2xl text-center space-y-8">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-medium mb-4">
+        <div class="status-badge inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-medium mb-4">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
@@ -361,58 +362,94 @@
         </p>
         
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <button onclick="console.log('Action successful! ✅', { user: 'Admin', status: 200 })" class="w-full sm:w-auto px-8 py-3 bg-indigo-500 hover:bg-indigo-600 transition-all rounded-lg font-semibold shadow-lg shadow-indigo-500/20">
+            <button id="test-btn" class="w-full sm:w-auto px-8 py-3 bg-indigo-500 hover:bg-indigo-600 transition-all rounded-lg font-semibold shadow-lg shadow-indigo-500/20">
                 Test Object Log
             </button>
-            <button onclick="console.warn('Network latency detected.')" class="w-full sm:w-auto px-8 py-3 bg-zinc-800 hover:bg-zinc-700 transition-all rounded-lg font-semibold border border-zinc-700">
+            <button id="warn-btn" class="w-full sm:w-auto px-8 py-3 bg-zinc-800 hover:bg-zinc-700 transition-all rounded-lg font-semibold border border-zinc-700">
                 Trigger Warning
             </button>
         </div>
     </div>
-
 </body>
 </html>`;
 
-        const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
-            mode: "htmlmixed", theme: "material-ocean", 
-            lineNumbers: true, lineWrapping: true,
-            styleActiveLine: true, matchBrackets: true, 
-            autoCloseBrackets: true, autoCloseTags: true,
-            foldGutter: true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        const defaultCss = `body { 
+    font-family: 'Inter', sans-serif; 
+}
+
+.status-badge {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
+}`;
+
+        const defaultJs = `document.getElementById('test-btn').addEventListener('click', () => {
+    console.log('Action successful! ✅', { user: 'Admin', status: 200, role: 'Developer' });
+});
+
+document.getElementById('warn-btn').addEventListener('click', () => {
+    console.warn('Network latency detected during fetch operation.');
+});`;
+
+        const legacyCode = localStorage.getItem('rapidforge-code');
+        const initHtml = localStorage.getItem('rapidforge-html') || (legacyCode ? legacyCode : defaultHtml);
+        const initCss = localStorage.getItem('rapidforge-css') || (legacyCode ? '' : defaultCss);
+        const initJs = localStorage.getItem('rapidforge-js') || (legacyCode ? '' : defaultJs);
+
+        const editorConfig = {
+            theme: "material-ocean", lineNumbers: true, lineWrapping: true,
+            styleActiveLine: true, matchBrackets: true, autoCloseBrackets: true, 
+            autoCloseTags: true, foldGutter: true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
             extraKeys: {
                 "Ctrl-F": toggleSearch, "Cmd-F": toggleSearch,
                 "Ctrl-H": () => { toggleSearch(); toggleReplaceRow(true); },
                 "Esc": closeSearch
             }
-        });
-        editor.setValue(localStorage.getItem('rapidforge-code') || defaultCode);
+        };
 
-        // --- THEME LOGIC ---
+        const editors = {
+            html: CodeMirror.fromTextArea(document.getElementById('code-html'), { ...editorConfig, mode: "htmlmixed" }),
+            css: CodeMirror.fromTextArea(document.getElementById('code-css'), { ...editorConfig, mode: "css" }),
+            js: CodeMirror.fromTextArea(document.getElementById('code-js'), { ...editorConfig, mode: "javascript" })
+        };
+
+        editors.html.setValue(initHtml);
+        editors.css.setValue(initCss);
+        editors.js.setValue(initJs);
+
+        let activeEditor = editors.html; 
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.editor-wrapper').forEach(wrap => wrap.classList.remove('active'));
+            
+            btnElement.classList.add('active');
+            document.getElementById(`wrap-${tabId}`).classList.add('active');
+            
+            activeEditor = editors[tabId];
+            activeEditor.refresh(); 
+            closeSearch(); 
+        }
+
         let isLightMode = localStorage.getItem('rapidforge-theme') === 'light';
-        
         function applyTheme(light) {
             const icon = document.getElementById('theme-icon');
             if (light) {
                 document.documentElement.setAttribute('data-theme', 'light');
-                editor.setOption('theme', 'eclipse');
+                Object.values(editors).forEach(ed => ed.setOption('theme', 'eclipse'));
                 icon.setAttribute('data-feather', 'moon');
             } else {
                 document.documentElement.removeAttribute('data-theme');
-                editor.setOption('theme', 'material-ocean');
+                Object.values(editors).forEach(ed => ed.setOption('theme', 'material-ocean'));
                 icon.setAttribute('data-feather', 'sun');
             }
             feather.replace();
         }
-
         function toggleTheme() {
             isLightMode = !isLightMode;
             localStorage.setItem('rapidforge-theme', isLightMode ? 'light' : 'dark');
             applyTheme(isLightMode);
         }
+        applyTheme(isLightMode);
 
-        applyTheme(isLightMode); // Initialize theme on load
-
-        // --- SEARCH LOGIC ---
         let searchState = { query: "", matchCase: false, matches: [], currentIndex: -1 };
         let marks = [];
         let activeMark = null;
@@ -424,9 +461,9 @@
         function toggleSearch() {
             document.getElementById('search-widget').classList.add('visible');
             findInput.focus();
-            if (editor.getSelection()) { findInput.value = editor.getSelection(); searchState.query = findInput.value; performSearch(); }
+            if (activeEditor.getSelection()) { findInput.value = activeEditor.getSelection(); searchState.query = findInput.value; performSearch(); }
         }
-        function closeSearch() { document.getElementById('search-widget').classList.remove('visible'); clearMarks(); editor.focus(); }
+        function closeSearch() { document.getElementById('search-widget').classList.remove('visible'); clearMarks(); activeEditor.focus(); }
         function toggleReplaceRow(forceOpen) {
             const row = document.getElementById('replace-row');
             const icon = document.getElementById('replace-toggle-icon');
@@ -444,10 +481,10 @@
             clearMarks(); searchState.matches = []; searchState.currentIndex = -1;
             if (!searchState.query) { document.getElementById('match-count').innerText = "0 of 0"; return; }
 
-            const cursor = editor.getSearchCursor(searchState.query, null, { caseFold: !searchState.matchCase });
+            const cursor = activeEditor.getSearchCursor(searchState.query, null, { caseFold: !searchState.matchCase });
             while (cursor.findNext()) {
                 searchState.matches.push({ from: cursor.from(), to: cursor.to() });
-                marks.push(editor.markText(cursor.from(), cursor.to(), { className: "cm-search-match" }));
+                marks.push(activeEditor.markText(cursor.from(), cursor.to(), { className: "cm-search-match" }));
             }
 
             const count = searchState.matches.length;
@@ -457,8 +494,8 @@
         function highlightCurrent(index) {
             if (activeMark) activeMark.clear();
             const match = searchState.matches[index];
-            editor.scrollIntoView(match.from, 200);
-            activeMark = editor.markText(match.from, match.to, { className: "cm-search-match-active" });
+            activeEditor.scrollIntoView(match.from, 200);
+            activeMark = activeEditor.markText(match.from, match.to, { className: "cm-search-match-active" });
             document.getElementById('match-count').innerText = `${index + 1} of ${searchState.matches.length}`;
         }
         function findNext(forward) {
@@ -468,70 +505,72 @@
         }
         function replaceOne() {
             if (searchState.matches.length === 0) return;
-            editor.replaceRange(document.getElementById('replace-input').value, searchState.matches[searchState.currentIndex].from, searchState.matches[searchState.currentIndex].to);
+            activeEditor.replaceRange(document.getElementById('replace-input').value, searchState.matches[searchState.currentIndex].from, searchState.matches[searchState.currentIndex].to);
             performSearch();
         }
         function replaceAll() {
             if (!searchState.query) return;
             const txt = document.getElementById('replace-input').value;
-            const cursor = editor.getSearchCursor(searchState.query, null, { caseFold: !searchState.matchCase });
-            editor.operation(() => { while (cursor.findNext()) cursor.replace(txt); });
+            const cursor = activeEditor.getSearchCursor(searchState.query, null, { caseFold: !searchState.matchCase });
+            activeEditor.operation(() => { while (cursor.findNext()) cursor.replace(txt); });
             performSearch();
         }
 
-        editor.on("change", clearMarks);
+        Object.values(editors).forEach(ed => ed.on("change", clearMarks));
 
-        // --- PREVIEW LOGIC ---
         const iframe = document.getElementById('preview-frame');
         const getInterceptor = (isGhost) => {
             const ghostCSS = isGhost ? `* { outline: 1px dashed rgba(99, 102, 241, 0.5) !important; background: rgba(99, 102, 241, 0.02) !important; }` : '';
             return '\x3Cscript>' + `
             (function() {
                 if(${isGhost}) { const s = document.createElement('style'); s.innerHTML = \`${ghostCSS}\`; document.head.appendChild(s); }
-                
-                // Safe serialization to prevent circular reference crashes
-                const safeStringify = (obj) => {
-                    try { return JSON.stringify(obj, null, 2); } 
-                    catch(e) { return '[Complex/Circular Object]'; }
-                };
-
+                const safeStringify = (obj) => { try { return JSON.stringify(obj, null, 2); } catch(e) { return '[Complex/Circular Object]'; } };
                 const log = console.log;
                 ['log', 'warn', 'error'].forEach(type => {
                     const orig = console[type];
                     console[type] = (...a) => {
                         orig.apply(console, a);
-                        window.parent.postMessage({
-                            source: 'iframe-log',
-                            type,
-                            msg: a.map(v => typeof v === 'object' ? safeStringify(v) : String(v)).join(' ')
-                        }, '*');
+                        window.parent.postMessage({ source: 'iframe-log', type, msg: a.map(v => typeof v === 'object' ? safeStringify(v) : String(v)).join(' ') }, '*');
                     };
                 });
-                window.onerror = function(msg, url, line) { 
-                    window.parent.postMessage({source:'iframe-log', type:'error', msg: \`Error (Line \${line}): \${msg}\`}, '*'); 
-                    return false;
-                };
+                window.onerror = function(msg, url, line) { window.parent.postMessage({source:'iframe-log', type:'error', msg: \`Error (Line \${line}): \${msg}\`}, '*'); return false; };
             })();` + '\x3C/script>';
         };
 
-        let timeoutId;
-        function updatePreview() {
-            const raw = editor.getValue();
-            localStorage.setItem('rapidforge-code', raw);
-            const finalCode = raw.includes('</body>') ? raw.replace('</body>', getInterceptor(ghostMode) + '</body>') : raw + getInterceptor(ghostMode);
-            iframe.srcdoc = finalCode;
+        function compileCode() {
+            const htmlVal = editors.html.getValue();
+            const cssVal = editors.css.getValue();
+            const jsVal = editors.js.getValue();
+
+            localStorage.setItem('rapidforge-html', htmlVal);
+            localStorage.setItem('rapidforge-css', cssVal);
+            localStorage.setItem('rapidforge-js', jsVal);
+
+            let finalCode = htmlVal;
+
+            if (finalCode.includes('<head>') || finalCode.includes('<body>')) {
+                if(cssVal) finalCode = finalCode.replace('</head>', `\n<style>\n${cssVal}\n</style>\n</head>`);
+                finalCode = finalCode.replace('</body>', `\n${getInterceptor(ghostMode)}\n<script>\n${jsVal}\n\x3C/script>\n</body>`);
+            } else {
+                finalCode = `<!DOCTYPE html>\n<html>\n<head>\n<style>\n${cssVal}\n</style>\n</head>\n<body>\n${finalCode}\n${getInterceptor(ghostMode)}\n<script>\n${jsVal}\n\x3C/script>\n</body>\n</html>`;
+            }
+
+            return finalCode;
         }
 
-        // Debounce typing to prevent excessive re-renders on huge files
-        editor.on("change", () => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(updatePreview, 300);
+        let timeoutId;
+        function updatePreview() {
+            iframe.srcdoc = compileCode();
+        }
+
+        Object.values(editors).forEach(ed => {
+            ed.on("change", () => { clearTimeout(timeoutId); timeoutId = setTimeout(updatePreview, 300); });
         });
         setTimeout(updatePreview, 100);
 
         function injectLib(lib) {
             let cdn = '';
-            const code = editor.getValue();
+            const code = editors.html.getValue();
             if (lib === 'tailwind' && !code.includes('cdn.tailwindcss.com')) {
                 cdn = '\x3Cscript src="https://cdn.tailwindcss.com">\x3C/script>';
             } else if (lib === 'bootstrap' && !code.includes('bootstrap.min.css')) {
@@ -540,7 +579,8 @@
                 cdn = '\x3Cscript src="https://code.jquery.com/jquery-3.7.1.min.js">\x3C/script>';
             }
             if (cdn) {
-                editor.setValue(code.includes('</head>') ? code.replace('</head>', cdn + '\n</head>') : cdn + '\n' + code);
+                editors.html.setValue(code.includes('</head>') ? code.replace('</head>', cdn + '\n</head>') : cdn + '\n' + code);
+                if(activeEditor !== editors.html) switchTab('html', document.querySelector('.tab-btn')); 
             }
             document.getElementById('lib-select').value = "";
         }
@@ -560,15 +600,11 @@
         document.addEventListener('mousemove', (e) => {
             if (!isDrag) return;
             const p = (e.clientX / window.innerWidth) * 100;
-            if (p > 15 && p < 85) {
-                leftPane.style.width = p + "%";
-                rightPane.style.width = (100 - p) + "%";
-            }
+            if (p > 15 && p < 85) { leftPane.style.width = p + "%"; rightPane.style.width = (100 - p) + "%"; }
         });
 
         function setDevice(mode) {
             const desk = document.getElementById('btn-desktop'), mob = document.getElementById('btn-mobile');
-            const iframe = document.getElementById('preview-frame');
             const consoleWrap = document.getElementById('console-wrap');
             if (mode === 'desktop') {
                 desk.classList.add('active'); mob.classList.remove('active');
@@ -592,10 +628,17 @@
         }
         
         function clearConsole(e) { e.stopPropagation(); document.getElementById('console-logs').innerHTML = ''; }
-        function formatCode() { const total = editor.lineCount(); for(let i=0; i<total; i++) editor.indentLine(i); }
-        function toggleVim(e) { editor.setOption("keyMap", e ? "vim" : "default"); }
-        function openNewTab() { window.open(URL.createObjectURL(new Blob([editor.getValue()], {type:'text/html'})), '_blank'); }
-        function downloadProject() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([editor.getValue()],{type:'text/html'})); a.download='rapidforge-build.html'; a.click(); }
+        
+        function formatCode() { const total = activeEditor.lineCount(); for(let i=0; i<total; i++) activeEditor.indentLine(i); }
+        
+        function toggleVim(e) { Object.values(editors).forEach(ed => ed.setOption("keyMap", e ? "vim" : "default")); }
+        
+        function getExportCode() {
+            let code = compileCode();
+            return code.replace(/<script>\s*\(function\(\) \{\s*if\(false\).*?<\/script>/s, '');
+        }
+        function openNewTab() { window.open(URL.createObjectURL(new Blob([getExportCode()], {type:'text/html'})), '_blank'); }
+        function downloadProject() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([getExportCode()],{type:'text/html'})); a.download='rapidforge-build.html'; a.click(); }
         
         window.addEventListener('message', (e) => {
             if(e.data && e.data.source === 'iframe-log') {
